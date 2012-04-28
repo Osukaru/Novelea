@@ -81,23 +81,28 @@
         <script src="../assets/js/bootstrap-dropdown.js"></script> 
         <script src="../assets/js/underscore.js"></script>
         <script src="../assets/js/novelea.js"></script>
+        
+        <script type="text/template" id="novel-fragment-template-branch">
+			<div class="btn-group">
+				<button data-toggle="dropdown" class="btn btn-warning dropdown-toggle"><%= novel_fragment_bothers.length %> Branche(s) <span class="caret"></span></button>
+				
+				<ul class="dropdown-menu">
+					<% for (var i=0; i<novel_fragment_bothers.length;i++) { %>
+						<li><a data-id="<%= novel_fragment_bothers[i].id %>" class="view-branch" href="#"><%= novel_fragment_bothers[i].text %></a></li>
+					<% } %>
+                    <li class="divider"></li>
+                    <li><a href="#" class="make-branch">Make branch</a></li>
+                 </ul>       
+            </div>                       
+		</script>			
+                            
         <script type="text/template" id="novel-fragment-template">
-            <div data-id="<%= novel_fragment_id %>" class="row well novel-fragment">
+            <div data-id="<%= novel_fragment_id %>" data-pid="<%= novel_fragment_pid %>" class="row well novel-fragment">
                 <div class="span10">
                     <span><%= novel_fragment_text %></span>
                     <div class="options"><br/>
 						<% if ( novel_fragment_bothers.length > 1 ) { %>
-							<div class="btn-group">
-								<button data-toggle="dropdown" class="btn btn-warning dropdown-toggle"><%= novel_fragment_bothers.length %> Branche(s) <span class="caret"></span></button>
-							
-								<ul class="dropdown-menu">
-									<% for (var i=0; i<novel_fragment_bothers.length;i++) { %>
-										<li><a data-id="<%= novel_fragment_bothers[i].id %>" class="view-branch" href="#"><%= novel_fragment_bothers[i].text %></a></li>
-									<% } %>
-                                    <li class="divider"></li>
-                                    <li><a href="#" class="make-branch">Make branch</a></li>
-                               </ul>       
-                            </div> 
+							<%= _.template( $("#novel-fragment-template-branch").html(), {novel_fragment_bothers:novel_fragment_bothers}) %>
                         <% } else { %>
 							<button class="btn btn-warning make-branch">Make branch</button>
                         <% } %>
