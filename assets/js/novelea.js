@@ -56,4 +56,13 @@ $(document).ready(function(){
 		});
         return false;
     }
+
+
 });
+
+    function showAlert(text){
+
+        $("#alerts").append('<div class="alert alert-info fade in">' +  text + ' <button class="close" data-dismiss="alert">×</button>');
+        $('.alert').fadeOut(3000);
+
+    };
