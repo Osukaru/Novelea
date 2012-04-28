@@ -20,6 +20,7 @@ $(document).ready(function(){
     });
 
     function publishNovelFragment(data,brothers){
+		if ( !brothers ) var brothers = {}
 		socket.emit('getRedisData', {pid: data.id});
         var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_id: data.id, novel_fragment_text: data.text, novel_fragment_bothers:brothers} );
         var nf = $(novel_fragment_template).appendTo($('#novel'));
