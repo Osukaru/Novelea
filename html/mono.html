@@ -13,6 +13,10 @@
           body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
           }
+          
+          .novel-fragment:hover .options { display:block; }
+          .novel-fragment .options { display:nosdsdne; }
+          
         </style>
         <link href="../assets/css/bootstrap.css" rel="stylesheet">
         <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -54,12 +58,17 @@
                     <div id="novel">
 
                     </div>
-
-                    <form id="publish-form" class="well form-search">
-                        <h3>...</h3>
-                        <textarea id="novel-fragment-input" name="novel-fragment" style="width:100%;" class="input-medium" required="required"></textarea>
-                        <button type="submit" id="publish" class="btn">Publish</button>
-                    </form>
+					<div class="row">
+						<div class="span12">
+							<form id="publish-form" class="well form-search">
+								<h3>...</h3>
+								<textarea id="novel-fragment-input" name="novel-fragment" style="width:100%;" class="input-medium" required="required"></textarea>
+								<button data-pid="0" type="submit" id="publish" class="btn">Publish</button>
+							</form>
+						</div>
+					</div>
+ 
+                    </div>
                 </div>
             </div>
         </div> <!-- /container -->
@@ -76,8 +85,22 @@
             <div data-id="<%= novel_fragment_id %>" class="row well novel-fragment">
                 <div class="span10">
                     <span><%= novel_fragment_text %></span>
-                    <div>
-                        <button class="btn btn-warning ">Make branch</button>
+                    <div class="options"><br/>
+						<% if ( novel_fragment_bothers.length > 1 ) { %>
+							<div class="btn-group">
+								<button data-toggle="dropdown" class="btn btn-warning dropdown-toggle"><%= novel_fragment_bothers.length %> Branche(s) <span class="caret"></span></button>
+							
+								<ul class="dropdown-menu">
+									<% for (var i=0; i<novel_fragment_bothers.length;i++) { %>
+										<li><a data-id="<%= novel_fragment_bothers[i].id %>" class="view-branch" href="#"><%= novel_fragment_bothers[i].text %></a></li>
+									<% } %>
+                                    <li class="divider"></li>
+                                    <li><a href="#" class="make-branch">Make branch</a></li>
+                               </ul>       
+                            </div> 
+                        <% } else { %>
+							<button class="btn btn-warning make-branch">Make branch</button>
+                        <% } %>
                     </div>
                 </div>
                 <div class="span2">

@@ -2,10 +2,7 @@ $(document).ready(function(){
     var socket = io.connect('http://192.168.3.75:8081');
     
     socket.on('getRedisDataResponse', function (data) {
-        for (var i = 0; i < data.length; i++) {
-            publishNovelFragment(data[i]);
-        };
-
+		publishNovelFragment(data[0], data);
     });
 
     socket.on('publish', publishNovelFragment);
@@ -16,13 +13,39 @@ $(document).ready(function(){
 
     $("#publish-form").submit(function(event){
         event.preventDefault();
-        socket.emit('setRedisData', { text: $('#novel-fragment-input').val()});
+        
+        var pid = $('#publish').attr('data-pid');
+        socket.emit('setRedisData', { pid: pid, text: $('#novel-fragment-input').val()});
         return false;
     });
 
-    function publishNovelFragment(data){
-        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_id: data.id, novel_fragment_text: data.text} );
-        $('#novel').append(novel_fragment_template); 
+    function publishNovelFragment(data,brothers){
+		socket.emit('getRedisData', {pid: data.id});
+        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_id: data.id, novel_fragment_text: data.text, novel_fragment_bothers:brothers} );
+        var nf = $(novel_fragment_template).appendTo($('#novel'));
+        $('#publish').attr('data-pid' , data.id);
+        
+		$(nf).find('.view-branch').click(function(e) {
+			var pid = $(e.currentTarget).parents('.novel-fragment').attr('data-id');
+			var del = false;
+			$('#publish').attr('data-pid' , pid);
+			$('#novel').find('.novel-fragment').each(function(index, ele) {
+				console.log($(ele), $(ele).attr('data-id'), pid, ($(ele).attr('data-id')==pid));
+				if ( $(ele).attr('data-id') == pid ) { del = true; }
+				if ( del ) { $(ele).remove(); }
+			});
+			socket.emit('getRedisData', {id: $(e.currentTarget).attr('data-id')});
+		});
+		
+		$(nf).find('.make-branch').click(function(e) {
+			var pid = $(e.currentTarget).parents('.novel-fragment').attr('data-id');
+			var del = false;
+			$('#publish').attr('data-pid' , pid);
+			$('#novel').find('.novel-fragment').each(function(index, ele) {
+				if ( del ) { $(ele).remove(); }
+				if ( $(ele).attr('data-id') == pid ) { del = true; }
+			});
+		});
         return false;
     }
 });

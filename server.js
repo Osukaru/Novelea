@@ -11,7 +11,12 @@ io.sockets.on('connection', function (socket) {
 	socket.on('getRedisData', function (config) {
 		console.log('getRedisData', config);
 		if ( !config.pid ) config.pid = 0;
-		client.keys('{nf}{*}{'+config.pid+'}', function (err, replies) {
+	
+		var match = '{nf}{*}{'+config.pid+'}';
+		if ( config.id ) { match = '{nf}{'+config.id+'}{*}' } 
+		
+		client.keys(match, function (err, replies) {
+			replies.sort();
 			client.mget(replies, function (err, res) {
 				if ( !res ) return false;
 				
@@ -20,7 +25,7 @@ io.sockets.on('connection', function (socket) {
 			});
 			
 			console.log('DEBUG:::::' + replies.length + " replies:");
-			
+			socket.emit('debug', replies);
 		});
 	});
   
