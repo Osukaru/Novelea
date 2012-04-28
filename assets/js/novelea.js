@@ -19,6 +19,7 @@ $(document).ready(function(){
         
         var pid = $('#publish').attr('data-pid');
         socket.emit('setRedisData', { pid: pid, text: $('#novel-fragment-input').val(), user: $('#user-input').val()});
+        $('#novel-fragment-input').val('')
         return false;
     });
 
