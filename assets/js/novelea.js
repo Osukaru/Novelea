@@ -5,7 +5,10 @@ $(document).ready(function(){
 		publishNovelFragment(data[0], data);
     });
 
-    socket.on('publish', publishNovelFragment);
+    socket.on('publish', function(data)  {
+		showAlert('<b>' + data.text + '</b> by ' + data.user);
+		publishNovelFragment(data);
+	});
     
     socket.on('connect', function (data) {
         socket.emit('getRedisData', {});
@@ -28,12 +31,13 @@ $(document).ready(function(){
 		if ( last.length != 0 ) {
 			if ( data.pid != last.attr('data-id') ) { 	
 		//		socket.emit('getRedisData', {pid: data.pid});
+			
 				return false; 
 			}
 		}
 		
-
         var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_pid: data.pid,novel_fragment_id: data.id,  novel_fragment_text: data.text, novel_fragment_bothers:brothers,  user: data.user, time:timeAgo( data.time)} );
+
         var nf = $(novel_fragment_template).appendTo($('#novel'));
         $('#publish').attr('data-pid' , data.id);
         
@@ -58,6 +62,7 @@ $(document).ready(function(){
 			});
 		});
         return false;
+
     };
     
     function timeAgo(date) {
@@ -74,4 +79,11 @@ $(document).ready(function(){
 
 		return string	
 	}
+
+    function showAlert(text){
+
+        $("#alerts").append('<div class="alert alert-info fade in">' +  text + ' <button class="close" data-dismiss="alert">×</button>');
+        $('.alert').fadeOut(3000);
+
+    };
 });
