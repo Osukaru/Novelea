@@ -9,8 +9,8 @@
     <script>
 
     var socket = io.connect('http://192.168.3.75:8081');
-	socket.on('debug', function (data) {
-		console.log(data);
+	socket.on('getRedisDataResponse', function (data) {
+		console.log('getRedisDataResponse', data);
 	});
 	socket.on('publish', function(data){
 		console.log(data);

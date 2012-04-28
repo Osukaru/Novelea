@@ -16,11 +16,11 @@ io.sockets.on('connection', function (socket) {
 				if ( !res ) return false;
 				
 				for(i=0;i<res.length;i++) { res[i] = eval('(' + res[i] + ')'); };
-				socket.emit('debug', res);
+				socket.emit('getRedisDataResponse', res);
 			});
 			
 			console.log('DEBUG:::::' + replies.length + " replies:");
-			socket.emit('debug', replies);
+			
 		});
 	});
   
