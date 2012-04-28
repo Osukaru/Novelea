@@ -2,7 +2,6 @@ $(document).ready(function(){
     var socket = io.connect('http://192.168.3.75:8081');
     
     socket.on('getRedisDataResponse', function (data) {
-		console.log(data);
 		publishNovelFragment(data[0], data);
     });
 
@@ -33,13 +32,8 @@ $(document).ready(function(){
 			}
 		}
 		
-<<<<<<< HEAD
-        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_pid: data.pid,novel_fragment_id: data.id,  novel_fragment_text: data.text, novel_fragment_bothers:brothers} );
-=======
-		
-        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_id: data.id, novel_fragment_text: data.text, novel_fragment_bothers:brothers, user: data.user} );
 
->>>>>>> ba5912f3d7da98c855a9ad65dffd93497291cb8f
+        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_pid: data.pid,novel_fragment_id: data.id,  novel_fragment_text: data.text, novel_fragment_bothers:brothers,  user: data.user, time:timeAgo( data.time)} );
         var nf = $(novel_fragment_template).appendTo($('#novel'));
         $('#publish').attr('data-pid' , data.id);
         
@@ -64,5 +58,20 @@ $(document).ready(function(){
 			});
 		});
         return false;
-    }
+    };
+    
+    function timeAgo(date) {
+		var secs =  (new Date().getTime() - date)/1000; 
+		toSecond = secs % 60;
+		toMinute = parseInt((secs % 3600) / 60);
+		toHour = parseInt(secs / 3600);
+
+		var string = '';
+		if (toHour > 0)
+			string = string + toHour + 'h ';
+		string = string + toMinute + 'm ';
+		string = string + parseInt(toSecond) + 's';
+
+		return string	
+	}
 });
