@@ -5,27 +5,26 @@
     <title>Novelea</title>
 
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-    <script src="http://192.168.3.67:8080/socket.io/socket.io.js"></script>
+    <script src="http://192.168.3.75:8081/socket.io/socket.io.js"></script>
     <script>
 
-      var socket = io.connect('http://192.168.3.67:8080');
+    var socket = io.connect('http://192.168.3.75:8081');
+	socket.on('debug', function (data) {
+		console.log(data);
+	});
+	socket.on('publish', function(data){
+		console.log(data);
+        $('#vuelta').html(data.text);
+    });
+    
+    socket.on('connect', function (data) {
+		socket.emit('getRedisData', {});
+	});
 
-      socket.on('connect', function (data) {
-
-         socket.on('respuesta', function(data){
-             console.log(data);
-             $('#vuelta').html(data.respuesta);
-         });
-      
-      });
-
-      function pasarDatos(){
-
-          socket.emit('envio', { respuesta: $('#input_entrada').val() });
-          $('#vuelta').html($('#input_entrada').val() );
-          return false;
-
-      };
+    function pasarDatos(){
+		socket.emit('setRedisData', { text: $('#input_entrada').val()});
+        return false;
+	};
       
     </script>
     </head>
