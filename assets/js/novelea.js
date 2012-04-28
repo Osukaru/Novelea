@@ -2,6 +2,8 @@ $(document).ready(function(){
     var socket = io.connect('http://192.168.3.75:8081');
     
     socket.on('getRedisDataResponse', function (data) {
+		if ( publishNovelFragment(data[0].pid) != $('#publish').attr('data-pid') ) return false;
+		
 		publishNovelFragment(data[0], data);
     });
 
