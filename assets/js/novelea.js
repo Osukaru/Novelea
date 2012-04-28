@@ -22,7 +22,7 @@ $(document).ready(function(){
 
     function publishNovelFragment(data){
         var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_id: data.id, novel_fragment_text: data.text} );
-        $('#novel-fragment-list').append(novel_fragment_template); 
+        $('#novel').append(novel_fragment_template); 
         return false;
     }
 });
