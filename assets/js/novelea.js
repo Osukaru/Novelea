@@ -2,11 +2,13 @@ $(document).ready(function(){
     var socket = io.connect('http://192.168.3.75:8081');
     
     socket.on('getRedisDataResponse', function (data) {
-		console.log(data);
 		publishNovelFragment(data[0], data);
     });
 
-    socket.on('publish', publishNovelFragment);
+    socket.on('publish', function(data)  {
+		showAlert('<b>' + data.text + '</b> by ' + data.user);
+		publishNovelFragment(data);
+	});
     
     socket.on('connect', function (data) {
         socket.emit('getRedisData', {});
@@ -17,6 +19,7 @@ $(document).ready(function(){
         
         var pid = $('#publish').attr('data-pid');
         socket.emit('setRedisData', { pid: pid, text: $('#novel-fragment-input').val(), user: $('#user-input').val()});
+        $('#novel-fragment-input').val('')
         return false;
     });
 
@@ -29,12 +32,12 @@ $(document).ready(function(){
 		if ( last.length != 0 ) {
 			if ( data.pid != last.attr('data-id') ) { 	
 		//		socket.emit('getRedisData', {pid: data.pid});
+			
 				return false; 
 			}
 		}
 		
-
-        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_pid: data.pid,novel_fragment_id: data.id,  novel_fragment_text: data.text, novel_fragment_bothers:brothers , user: data.user } );
+        var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_pid: data.pid,novel_fragment_id: data.id,  novel_fragment_text: data.text, novel_fragment_bothers:brothers,  user: data.user, time:timeAgo( data.time)} );
 
         var nf = $(novel_fragment_template).appendTo($('#novel'));
         $('#publish').attr('data-pid' , data.id);
@@ -60,10 +63,23 @@ $(document).ready(function(){
 			});
 		});
         return false;
-    }
 
+    };
+    
+    function timeAgo(date) {
+		var secs =  (new Date().getTime() - date)/1000; 
+		toSecond = secs % 60;
+		toMinute = parseInt((secs % 3600) / 60);
+		toHour = parseInt(secs / 3600);
 
-});
+		var string = '';
+		if (toHour > 0)
+			string = string + toHour + 'h ';
+		string = string + toMinute + 'm ';
+		string = string + parseInt(toSecond) + 's';
+
+		return string	
+	}
 
     function showAlert(text){
 
@@ -71,3 +87,4 @@ $(document).ready(function(){
         $('.alert').fadeOut(3000);
 
     };
+});

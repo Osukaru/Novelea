@@ -69,7 +69,7 @@
 						<div class="span12">
 							<form id="publish-form" class="well form-search">
 								<h3>...</h3>
-                                <textarea id="novel-fragment-input" name="novel-fragment" style="width:100%;" class="input-medium" required="required"></textarea>
+                                <textarea placeholder="Once Upon a Time ..." id="novel-fragment-input" name="novel-fragment" style="width:100%;" class="input-medium" required="required"></textarea>
                                 <label for="user">by </label>
                                 <input type="text" id="user-input" name="user" class="input-medium" required="required"></input>
 								<button data-pid="0" type="submit" id="publish" class="btn">Publish</button>
@@ -98,7 +98,7 @@
 				
 				<ul class="dropdown-menu">
 					<% for (var i=0; i<novel_fragment_bothers.length;i++) { %>
-						<li><a data-id="<%= novel_fragment_bothers[i].id %>" class="view-branch" href="#"><%= novel_fragment_bothers[i].text %></a></li>
+						<li><a data-id="<%= novel_fragment_bothers[i].id %>" class="view-branch" href="#">by <%= novel_fragment_bothers[i].user %> <b><%= novel_fragment_bothers[i].text.substr(0,20) + ' ...' %></b></a></li>
 					<% } %>
                     <li class="divider"></li>
                     <li><a href="#" class="make-branch">Make branch</a></li>
@@ -120,6 +120,7 @@
                 </div>
                 <div class="span2">
                      <span class="label label-success">by <%= user %></span>
+                     <span class="label label-info">at <%= time %></span>
                 </div>
                 <br style="clear:both;"/>
             </div>

@@ -33,7 +33,7 @@ io.sockets.on('connection', function (socket) {
 		console.log('setRedisData', data);
 		if ( !data.pid ) data.pid = 0;
 		data.id = new Date().getTime() + Math.random();
-		date.time = new Date().getTime();
+		data.time = new Date().getTime();
 		client.set('{nf}{'+data.id+'}{'+data.pid+'}', JSON.stringify(data), redis.print);
 		
 		socket.emit('publish', data);
