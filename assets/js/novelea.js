@@ -2,7 +2,13 @@ $(document).ready(function(){
     var socket = io.connect('http://192.168.3.75:8081');
     
     socket.on('getRedisDataResponse', function (data) {
-		if ( data[0].pid != $('#publish').attr('data-pid') ) return false;
+		
+		var last = $('#novel').find('.novel-fragment').last();
+		console.log(last);
+		if ( last.length != 0 ) {
+			console.log( data[0].pid , last.attr('data-id') );
+			if ( data[0].pid != last.attr('data-id') ) return false;
+		}
 		
 		publishNovelFragment(data[0], data);
     });
