@@ -29,15 +29,14 @@ $(document).ready(function(){
         $('#publish').attr('data-pid' , data.id);
         
 		$(nf).find('.view-branch').click(function(e) {
-			var pid = $(e.currentTarget).parents('.novel-fragment').attr('data-id');
+			var id = $(e.currentTarget).parents('.novel-fragment').attr('data-id');
 			var del = false;
-			$('#publish').attr('data-pid' , pid);
+			$('#publish').attr('data-pid' ,  $(e.currentTarget).parents('.novel-fragment').prev('.novel-fragment').attr('data-id'));
 			$('#novel').find('.novel-fragment').each(function(index, ele) {
-				console.log($(ele), $(ele).attr('data-id'), pid, ($(ele).attr('data-id')==pid));
-				if ( $(ele).attr('data-id') == pid ) { del = true; }
+				if ( $(ele).attr('data-id') == id ) { del = true; }
 				if ( del ) { $(ele).remove(); }
 			});
-			socket.emit('getRedisData', {id: $(e.currentTarget).attr('data-id')});
+			socket.emit('getRedisData', {id:  $(e.currentTarget).attr('data-id')});
 		});
 		
 		$(nf).find('.make-branch').click(function(e) {
