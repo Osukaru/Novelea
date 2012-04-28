@@ -2,8 +2,7 @@ $(document).ready(function(){
     var socket = io.connect('http://192.168.3.75:8081');
     
     socket.on('getRedisDataResponse', function (data) {
-
-		console.log((data[0], data));
+		console.log(data);
 		publishNovelFragment(data[0], data);
     });
 
@@ -28,17 +27,11 @@ $(document).ready(function(){
 		
 		var last = $('#novel').find('.novel-fragment').last();
 		if ( last.length != 0 ) {
-			if ( data.pid != last.attr('data-id') ) { 
-				console.log(brothers);	
-				$('*[data-pid="' + data.pid + '"]').find('.options').find('*').remove();
-				$(_.template( $("#novel-fragment-template-branch").html(), {novel_fragment_bothers:brothers})).appendTo($('*[data-pid="' + data.pid + '"]').find('.options'));
+			if ( data.pid != last.attr('data-id') ) { 	
+		//		socket.emit('getRedisData', {pid: data.pid});
 				return false; 
 			}
 		}
-		
-		
-		
-		
 		
         var novel_fragment_template = _.template( $("#novel-fragment-template").html(), {novel_fragment_pid: data.pid,novel_fragment_id: data.id,  novel_fragment_text: data.text, novel_fragment_bothers:brothers} );
         var nf = $(novel_fragment_template).appendTo($('#novel'));
